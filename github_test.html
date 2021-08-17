@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+
+    <title>My repositories</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+
+        <!-- <div id="test">scroll to understand</div> -->
+        <div id="wrapper" style="height: 400px; overflow: auto;">
+            <div class="container">
+                <div class="row">
+                    <h1>My repositories</h1>
+                    <div class="card border-secondary mb-3" style="max-width: 100;" v-for="r in repositories">
+                        <div class="card-header">{{r.name}}</div>
+                        <div class="card-body text-secondary">
+                            <h5 class="card-title">Description</h5>
+                            <p class="card-text">{{r.description}}</p>
+                            <h5 class="card-title">URL</h5>
+                            <p class="card-text">{{r.html_url}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+
+    <script>
+        const apiURL = "https://api.github.com/users/WillieGuan21/repos"
+        const app = Vue.createApp({
+            data() {
+                return {
+                    repositories: null,
+                }
+            },
+            created: function () {
+                this.myRepositories()
+            },
+            methods: {
+                myRepositories: function () {
+                    const t = this
+                    fetch(apiURL)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data[1])
+                            t.repositories = data
+                        })
+                }
+            }
+        })
+
+        vm = app.mount("#app")
+
+
+        const more = '<div style="height: 1000px; "></div>';
+        const wrapper = document.getElementById("wrapper");
+        const content = document.getElementById("content");
+        content.innerHTML = more;
+
+        function addEvent(obj, ev, fn) {
+            if (obj.addEventListener) obj.addEventListener(ev, fn, false);
+            else if (obj.attachEvent) obj.attachEvent("on" + ev, fn);
+        }
+
+        function scroller() {
+            if (wrapper.scrollTop + wrapper.offsetHeight + 100 > content.offsetHeight) {
+                content.innerHTML += more;
+            }
+        }
+
+        addEvent(wrapper, "scroll", scroller);
+    </script>
+</body>
+
+</html>
